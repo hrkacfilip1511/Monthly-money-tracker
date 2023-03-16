@@ -19,13 +19,12 @@ const ManageExpenses = ({ route, navigation }) => {
     navigation.navigate("CurrentExpenses");
   };
   const updateHandler = () => {
-    const updatedExpense = {
-      id: route.params.expenseId,
-      description: expenseName,
-      amountValue: updateAmountValue,
-      date: new Date(),
-    };
-    updateExpense(updatedExpense);
+    updateExpense(
+      route.params.expenseId, // id
+      expenseName, // description
+      parseFloat(updateAmountValue), // amount
+      new Date() // date
+    );
     navigation.navigate("CurrentExpenses");
   };
   const addNewExpenseHandler = () => {

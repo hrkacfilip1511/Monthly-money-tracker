@@ -26,25 +26,26 @@ const createExpenseSlice = (set, get) => ({
       ),
     });
   },
-  updateExpense: (updatedVal) => {
-    const findedIndex = get().expenses.findIndex(
-      (expense) => expense.id === updatedVal.id
-    );
-    // console.log("novi", updatedVal);
-    // console.log("index", findedIndex);
-    // const updatedArray = [...get().expenses];
-    // updatedArray[findedIndex] = { ...updatedArray[findedIndex], updatedVal };
-    // console.log(updatedArray);
-    // set({
-    //   expenses: updatedArray
-    // });
-    // console.log("expenses", get().expenses);
-    // set({
-    //   thisMonthCosts: get().expenses.reduce(
-    //     (acc, curr) => acc + curr.amount,
-    //     0
-    //   ),
-    // });
+  updateExpense: (id, description, amount, date) => {
+    const expenses = get().expenses.map((expense) => {
+      return expense.id === id
+        ? {
+            ...expense,
+            id: id,
+            description: description,
+            amount: amount,
+            date: date,
+          }
+        : expense;
+    });
+
+    set({ expenses: expenses });
+    set({
+      thisMonthCosts: get().expenses.reduce(
+        (acc, curr) => acc + curr.amount,
+        0
+      ),
+    });
   },
 });
 
