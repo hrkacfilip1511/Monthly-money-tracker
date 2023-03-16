@@ -30,6 +30,7 @@ const createExpenseSlice = (set, get) => ({
     const expenses = get().expenses.map((expense) => {
       return expense.id === id
         ? {
+            ...expense,
             id: id,
             description: description,
             amount: amount,
