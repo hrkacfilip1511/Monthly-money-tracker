@@ -17,34 +17,34 @@ const BottomTabs = createBottomTabNavigator();
 const ExpensesOverview = () => {
   return (
     <BottomTabs.Navigator
-      screenOptions={({ navigation }) => ({
+      screenOptions={{
         headerStyle: { backgroundColor: GlobalColors.colors.darkBlue },
         headerTintColor: GlobalColors.colors.white,
         tabBarStyle: { backgroundColor: GlobalColors.colors.darkBlue },
         tabBarActiveTintColor: GlobalColors.colors.orange,
         tabBarInactiveTintColor: GlobalColors.colors.white,
-        headerRight: () => (
-          <IconButton
-            iconName="add"
-            size={24}
-            color={GlobalColors.colors.white}
-            onPress={() => {
-              navigation.navigate("ManageExpense");
-            }}
-          />
-        ),
-      })}
+      }}
     >
       <BottomTabs.Screen
         name="CurrentExpenses"
         component={CurrentExpenses}
-        options={{
+        options={({ navigation }) => ({
           title: "This Month",
           tabBarLabel: "This Month",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="attach-money" size={size} color={color} />
           ),
-        }}
+          headerRight: () => (
+            <IconButton
+              iconName="add"
+              size={24}
+              color={GlobalColors.colors.white}
+              onPress={() => {
+                navigation.navigate("ManageExpense");
+              }}
+            />
+          ),
+        })}
       />
       <BottomTabs.Screen
         name="LastMonthExpenses"
@@ -79,8 +79,22 @@ export default function App() {
               headerShown: false,
             }}
           />
-          <Stack.Screen name="ManageExpense" component={ManageExpense} />
-          <Stack.Screen name="ChangeBudget" component={ChangeBudget} />
+          <Stack.Screen
+            name="ManageExpense"
+            component={ManageExpense}
+            options={{
+              headerTintColor: GlobalColors.colors.white,
+              title: "Manage Expense",
+            }}
+          />
+          <Stack.Screen
+            name="ChangeBudget"
+            component={ChangeBudget}
+            options={{
+              headerTintColor: GlobalColors.colors.white,
+              title: "Change Budget",
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

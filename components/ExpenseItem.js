@@ -4,16 +4,25 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { GlobalColors } from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import { formatDate } from "../functions/format-date";
-const ExpenseItem = (expense) => {
+const ExpenseItem = (props) => {
   const navigation = useNavigation();
   const manageExpenseHandler = () => {
-    navigation.navigate("ManageExpense", {
-      expenseId: expense.id,
-    });
+    if (props.isCurrentMonth) {
+      navigation.navigate("ManageExpense", {
+        expenseId: props.expense.id,
+        expenseName: props.expense.description,
+      });
+    }
   };
-  const formattedDate = formatDate(expense.expense.date);
+  const formattedDate = formatDate(props.expense.date);
+  //  if(!props.isCurrentMonth) {
+
+  //  }
   return (
-    <Pressable onPress={manageExpenseHandler}>
+    <Pressable
+      onPress={manageExpenseHandler}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
       <View style={styles.expenseContainer}>
         <View style={styles.dollarIcon}>
           <MaterialIcons
@@ -25,12 +34,12 @@ const ExpenseItem = (expense) => {
         <View style={styles.details}>
           <View style={styles.descriptionContainer}>
             <Text style={styles.itemTextDetail}>
-              {expense.expense.description}
+              {props.expense.description}
             </Text>
             <Text style={styles.itemTextDetail}>{formattedDate}</Text>
           </View>
           <View style={styles.amountContainer}>
-            <Text style={styles.amountText}>{expense.expense.amount}</Text>
+            <Text style={styles.amountText}>{props.expense.amount}</Text>
             <Text style={styles.moneyType}>KM</Text>
           </View>
         </View>
@@ -48,8 +57,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   expenseContainer: {
-    flex: 1,
     backgroundColor: GlobalColors.colors.skyBlue,
     marginVertical: 7,
     padding: 10,
@@ -87,6 +96,9 @@ const styles = StyleSheet.create({
   },
   moneyType: {
     color: GlobalColors.colors.black,
+  },
+  pressed: {
+    opacity: 0.8,
   },
 });
 export default ExpenseItem;
