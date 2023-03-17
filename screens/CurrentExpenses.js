@@ -6,11 +6,17 @@ import useStore from "../hooks/useStore";
 import BudgetHeader from "../components/BudgetHeader";
 const CurrentExpenses = ({ navigation }) => {
   const budget = useStore((state) => state.budget);
-  const thisMonthCosts = useStore((state) => state.thisMonthCosts);
   const changeBudgetHandler = () => {
     navigation.navigate("ChangeBudget");
   };
   const expenses = useStore((state) => state.expenses);
+  const thisMonthExpenses = expenses.filter((expense) => {
+    const thisMonth = new Date().getMonth();
+    const thisYear = new Date().getFullYear();
+    const previousMonths = new Date(expense.date).getMonth();
+    const expenseYear = new Date(expense.date).getFullYear();
+    return thisMonth - previousMonths === 0 && thisYear === expenseYear;
+  });
   return (
     <View style={styles.bigbig}>
       <BudgetHeader
@@ -20,7 +26,7 @@ const CurrentExpenses = ({ navigation }) => {
       />
       <ExpensesOutputHeader name="Costs" isCosts={true} />
       <ExpensesOutputHeader name="Balance" />
-      <ExpensesOutputItems expenses={expenses} isCurrentMonth={true} />
+      <ExpensesOutputItems expenses={thisMonthExpenses} isCurrentMonth={true} />
     </View>
   );
 };

@@ -3,13 +3,17 @@ import React from "react";
 import { GlobalColors } from "../constants/colors";
 import { Entypo } from "@expo/vector-icons";
 import useStore from "../hooks/useStore";
-const ExpensesOutputHeader = ({ name, total, isLastMonth, isCosts }) => {
+const ExpensesOutputHeader = ({
+  name,
+  isLastMonth,
+  isCosts,
+  lastMonthCosts,
+}) => {
   let status;
   const budget = useStore((state) => state.budget);
   const thisMonthCosts = useStore((state) => state.thisMonthCosts);
   const lastMonthBalance = useStore((state) => state.lastMonthBalance);
   let thisMontBalance;
-  let totalBalance = 0;
   if (!isLastMonth) {
     thisMontBalance = budget - thisMonthCosts;
   }
@@ -59,7 +63,7 @@ const ExpensesOutputHeader = ({ name, total, isLastMonth, isCosts }) => {
           >
             {thisMontBalance
               ? thisMontBalance?.toFixed(2)
-              : totalBalance?.toFixed(2)}
+              : lastMonthBalance?.toFixed(2)}
           </Text>
           <Text style={styles.moneyType}>KM</Text>
         </View>
@@ -75,7 +79,11 @@ const ExpensesOutputHeader = ({ name, total, isLastMonth, isCosts }) => {
       >
         <View style={styles.balanceDetails}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.costsText}>{thisMonthCosts}</Text>
+          <Text style={styles.costsText}>
+            {lastMonthCosts === 0
+              ? lastMonthCosts.toFixed(2)
+              : thisMonthCosts.toFixed(2)}
+          </Text>
           <Text style={styles.moneyType}>KM</Text>
         </View>
       </View>
