@@ -1,7 +1,7 @@
 const createExpenseSlice = (set, get) => ({
   budget: 0.0,
   expenses: [],
-  lastMonthBalance: 250.0,
+  lastMonthBalance: 0.0,
   thisMonthCosts: 0.0,
   setNewBudget: (newBudgetValue) => {
     set({ budget: newBudgetValue });
@@ -46,6 +46,9 @@ const createExpenseSlice = (set, get) => ({
         0
       ),
     });
+  },
+  setLastMonthBalance: (lastBalance) => {
+    set({ lastMonthBalance: lastBalance });
   },
 });
 
