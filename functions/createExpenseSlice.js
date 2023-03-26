@@ -1,51 +1,38 @@
 const createExpenseSlice = (set, get) => ({
-  budget: 0.0,
+  budget: 0,
   expenses: [],
-  lastMonthBalance: 0.0,
-  thisMonthCosts: 0.0,
+  lastMonthBalance: 0,
   setNewBudget: (newBudgetValue) => {
     set({ budget: newBudgetValue });
   },
+  setLastMonthBalance: (lastMonthBalance) => {
+    set({ lastMonthBalance: lastMonthBalance });
+  },
   setExpenses: (expense) => {
     set({ expenses: [...get().expenses, expense] });
-    set({
-      thisMonthCosts: get().expenses.reduce(
-        (acc, curr) => acc + curr.amount,
-        0
-      ),
-    });
+  },
+  setExpensesFromBackend: (expensesData) => {
+    set({ expenses: expensesData });
   },
   deleteExpense: (expenseId) => {
     set({
       expenses: get().expenses.filter((expense) => expense.id !== expenseId),
     });
-    set({
-      thisMonthCosts: get().expenses.reduce(
-        (acc, curr) => acc + curr.amount,
-        0
-      ),
-    });
   },
-  updateExpense: (id, description, amount, date) => {
+  updateExpense: (expenseData) => {
     const expenses = get().expenses.map((expense) => {
-      return expense.id === id
+      return expense.id === expenseData.id
         ? {
             ...expense,
-            id: id,
-            description: description,
-            amount: amount,
-            date: date,
+            id: expenseData.id,
+            description: expenseData.description,
+            amount: expenseData.amount,
+            date: expenseData.date,
           }
         : expense;
     });
 
     set({ expenses: expenses });
-    set({
-      thisMonthCosts: get().expenses.reduce(
-        (acc, curr) => acc + curr.amount,
-        0
-      ),
-    });
   },
   setLastMonthBalance: (lastBalance) => {
     set({ lastMonthBalance: lastBalance });

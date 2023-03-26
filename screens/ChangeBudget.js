@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, Alert } from "react-native";
 import React, { useState } from "react";
 import useStore from "../hooks/useStore";
 import { GlobalColors } from "../constants/colors";
@@ -8,7 +8,7 @@ import BudgetHeader from "../components/BudgetHeader";
 const ChangeBudget = ({ navigation }) => {
   const budgetValue = useStore((state) => state.budget);
   const setNewBudget = useStore((state) => state.setNewBudget);
-  const [budgetVal, setBudgetVal] = useState(null);
+  const [budgetVal, setBudgetVal] = useState();
   const newBudgetInputHandler = (value) => {
     setBudgetVal(parseFloat(value));
   };
@@ -18,9 +18,11 @@ const ChangeBudget = ({ navigation }) => {
   };
 
   const confirmNewBudgetHandler = () => {
-    if (budgetVal > 0) {
+    if (budgetVal || Number(budgetVal) || budgetVal >= 0) {
       setNewBudget(budgetVal);
       navigation.navigate("CurrentExpenses");
+    } else {
+      Alert.alert("Budget Error", "Budget value must be a number!");
     }
   };
   return (
