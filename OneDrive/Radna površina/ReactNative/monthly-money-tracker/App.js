@@ -11,9 +11,9 @@ import ManageExpense from "./screens/ManageExpenses";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import IconButton from "./UI/IconButton";
+import CategoryScreen from "./screens/CategoryScreen";
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
-
 const ExpensesOverview = () => {
   return (
     <BottomTabs.Navigator
@@ -52,13 +52,24 @@ const ExpensesOverview = () => {
         options={{
           title: "Last Month",
           tabBarLabel: "Last Month",
-
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="history" size={size} color={color} />
           ),
         }}
       />
     </BottomTabs.Navigator>
+  );
+};
+
+const CategoriesOverview = () => {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Cars" component={CategoryScreen} />
+      <Drawer.Screen name="Ingredients" component={CategoryScreen} />
+      <Drawer.Screen name="Health" component={CategoryScreen} />
+      <Drawer.Screen name="Technology" component={CategoryScreen} />
+      <Drawer.Screen name="House" component={CategoryScreen} />
+    </Drawer.Navigator>
   );
 };
 
@@ -72,6 +83,13 @@ export default function App() {
             headerStyle: { backgroundColor: GlobalColors.colors.darkBlue },
           }}
         >
+          {/* <Stack.Screen
+            name="CategoriesOverview"
+            component={CategoriesOverview}
+            options={{
+              headerShown: false,
+            }}
+          /> */}
           <Stack.Screen
             name="ExpensesOverview"
             component={ExpensesOverview}
