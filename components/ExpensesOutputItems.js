@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { FlatList } from "react-native";
 import React from "react";
 import ExpenseItem from "./ExpenseItem";
 
@@ -17,9 +17,5 @@ const ExpensesOutputItems = ({ expenses, isCurrentMonth }) => {
     />
   );
 };
-const styles = StyleSheet.create({
-  // flatList: {
-  //   flex: 1,
-  // },
-});
+
 export default ExpensesOutputItems;

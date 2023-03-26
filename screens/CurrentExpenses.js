@@ -1,15 +1,31 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ExpensesOutputItems from "../components/ExpensesOutputItems";
-import ExpensesOutputHeader from "../components/ExpensesOutputHeader";
 import useStore from "../hooks/useStore";
 import BudgetHeader from "../components/BudgetHeader";
+import ThisMonthCost from "../components/ThisMonthCost";
+import ThisMonthBalance from "../components/ThisMonthBalance";
+import { getExpenses } from "../functions/https";
+import LoadingOverlay from "../UI/LoadingOverlay";
 const CurrentExpenses = ({ navigation }) => {
   const budget = useStore((state) => state.budget);
+  const [isLoading, setIsLoading] = useState(true);
   const changeBudgetHandler = () => {
     navigation.navigate("ChangeBudget");
   };
+  const setExpensesFromBackend = useStore(
+    (state) => state.setExpensesFromBackend
+  );
   const expenses = useStore((state) => state.expenses);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      const expenses = await getExpenses();
+      setExpensesFromBackend(expenses);
+      setIsLoading(false);
+    };
+    fetchExpenses();
+  }, []);
   const thisMonthExpenses = expenses.filter((expense) => {
     const thisMonth = new Date().getMonth();
     const thisYear = new Date().getFullYear();
@@ -17,6 +33,13 @@ const CurrentExpenses = ({ navigation }) => {
     const expenseYear = new Date(expense.date).getFullYear();
     return thisMonth - previousMonths === 0 && thisYear === expenseYear;
   });
+  const thisMonthCosts = thisMonthExpenses.reduce(
+    (acc, curr) => acc + curr.amount,
+    0
+  );
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
   return (
     <View style={styles.bigbig}>
       <BudgetHeader
@@ -24,8 +47,8 @@ const CurrentExpenses = ({ navigation }) => {
         onPress={changeBudgetHandler}
         total={budget}
       />
-      <ExpensesOutputHeader name="Costs" isCosts={true} />
-      <ExpensesOutputHeader name="Balance" />
+      <ThisMonthCost thisMonthCosts={thisMonthCosts} />
+      <ThisMonthBalance thisMonthCosts={thisMonthCosts} />
       <ExpensesOutputItems expenses={thisMonthExpenses} isCurrentMonth={true} />
     </View>
   );
