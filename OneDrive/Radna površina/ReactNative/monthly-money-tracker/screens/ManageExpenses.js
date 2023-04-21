@@ -10,6 +10,8 @@ import {
   updateExpenseFromBackend,
 } from "../functions/https";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { Picker } from "@react-native-picker/picker";
+import { categories } from "../constants/categories";
 
 const ManageExpenses = ({ route, navigation }) => {
   const isEditing = route.params?.expenseId;
@@ -22,6 +24,7 @@ const ManageExpenses = ({ route, navigation }) => {
   const updateExpense = useStore((state) => state.updateExpense);
   const [dateValue, setDateValue] = useState();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("Choose category");
   let output;
   const cancelHandler = () => {
     navigation.navigate("CurrentExpenses");
@@ -52,6 +55,7 @@ const ManageExpenses = ({ route, navigation }) => {
           dateValue && new Date().getMonth() === new Date(dateValue)?.getMonth()
             ? new Date(dateValue)
             : new Date(),
+        category: selectedCategory,
       };
       const id = await storeExpense(expenseData);
       setExpenses({ ...expenseData, id: id });
@@ -86,7 +90,6 @@ const ManageExpenses = ({ route, navigation }) => {
       title: !!isEditing ? "Edit Expense" : "Add Expense",
     });
   }, [navigation, isEditing]);
-
   if (!!isEditing) {
     //Update itema
     output = (
@@ -146,6 +149,26 @@ const ManageExpenses = ({ route, navigation }) => {
             value={dateValue}
           />
         </View>
+        <View style={styles.picker}>
+          <Picker
+            selectedValue={selectedCategory}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedCategory(itemValue)
+            }
+            style={{ color: GlobalColors.colors.white }}
+          >
+            <Picker.Item label="Choose category" />
+            {categories.map((category) => {
+              return (
+                <Picker.Item
+                  key={category.id}
+                  label={category.categoryName}
+                  value={category.categoryName}
+                />
+              );
+            })}
+          </Picker>
+        </View>
         <View style={styles.buttons}>
           <TextButton text="Cancel" onPress={cancelHandler} flatMode={true} />
           <TextButton text="Add" onPress={addNewExpenseHandler} />
@@ -181,6 +204,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: GlobalColors.colors.skyBlue,
+  },
+  picker: {
+    minWidth: 230,
+    borderBottomColor: GlobalColors.colors.lightPurple,
+    borderBottomWidth: 3,
+    marginTop: 30,
   },
 });
 export default ManageExpenses;

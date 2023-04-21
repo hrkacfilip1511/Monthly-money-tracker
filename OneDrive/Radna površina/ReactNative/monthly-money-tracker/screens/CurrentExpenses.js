@@ -17,7 +17,6 @@ const CurrentExpenses = ({ navigation }) => {
     (state) => state.setExpensesFromBackend
   );
   const expenses = useStore((state) => state.expenses);
-
   useEffect(() => {
     const fetchExpenses = async () => {
       const expenses = await getExpenses();
@@ -41,16 +40,21 @@ const CurrentExpenses = ({ navigation }) => {
     return <LoadingOverlay />;
   }
   return (
-    <View style={styles.bigbig}>
-      <BudgetHeader
-        name="Budget"
-        onPress={changeBudgetHandler}
-        total={budget}
-      />
-      <ThisMonthCost thisMonthCosts={thisMonthCosts} />
-      <ThisMonthBalance thisMonthCosts={thisMonthCosts} />
-      <ExpensesOutputItems expenses={thisMonthExpenses} isCurrentMonth={true} />
-    </View>
+    <>
+      <View style={styles.bigbig}>
+        <BudgetHeader
+          name="Budget"
+          onPress={changeBudgetHandler}
+          total={budget}
+        />
+        <ThisMonthCost thisMonthCosts={thisMonthCosts} />
+        <ThisMonthBalance thisMonthCosts={thisMonthCosts} />
+        <ExpensesOutputItems
+          expenses={thisMonthExpenses}
+          isCurrentMonth={true}
+        />
+      </View>
+    </>
   );
 };
 const styles = StyleSheet.create({

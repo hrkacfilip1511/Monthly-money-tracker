@@ -20,6 +20,7 @@ export const getExpenses = async () => {
       description: response.data[key].description,
       amount: response.data[key].amount,
       date: new Date(response.data[key].date),
+      category: response.data[key].category,
     };
     expensesData.push(expenseResponseObj);
   }

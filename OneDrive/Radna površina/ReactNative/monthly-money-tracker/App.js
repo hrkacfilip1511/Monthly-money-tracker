@@ -1,8 +1,9 @@
+import "react-native-gesture-handler";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { GlobalColors } from "./constants/colors";
 import ChangeBudget from "./screens/ChangeBudget";
 import CurrentExpenses from "./screens/CurrentExpenses";
@@ -11,9 +12,10 @@ import ManageExpense from "./screens/ManageExpenses";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import IconButton from "./UI/IconButton";
-import CategoryScreen from "./screens/CategoryScreen";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 const ExpensesOverview = () => {
   return (
     <BottomTabs.Navigator
@@ -61,18 +63,6 @@ const ExpensesOverview = () => {
   );
 };
 
-const CategoriesOverview = () => {
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Cars" component={CategoryScreen} />
-      <Drawer.Screen name="Ingredients" component={CategoryScreen} />
-      <Drawer.Screen name="Health" component={CategoryScreen} />
-      <Drawer.Screen name="Technology" component={CategoryScreen} />
-      <Drawer.Screen name="House" component={CategoryScreen} />
-    </Drawer.Navigator>
-  );
-};
-
 export default function App() {
   return (
     <>
@@ -83,13 +73,6 @@ export default function App() {
             headerStyle: { backgroundColor: GlobalColors.colors.darkBlue },
           }}
         >
-          {/* <Stack.Screen
-            name="CategoriesOverview"
-            component={CategoriesOverview}
-            options={{
-              headerShown: false,
-            }}
-          /> */}
           <Stack.Screen
             name="ExpensesOverview"
             component={ExpensesOverview}
@@ -97,6 +80,7 @@ export default function App() {
               headerShown: false,
             }}
           />
+
           <Stack.Screen
             name="ManageExpense"
             component={ManageExpense}
@@ -118,5 +102,4 @@ export default function App() {
     </>
   );
 }
-
 const styles = StyleSheet.create({});
